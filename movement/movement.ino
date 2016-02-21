@@ -1,53 +1,31 @@
-int pirPin = 8;
-int val;
-int redPin = 11;
-int greenPin = 10;
-int bluePin = 9;
+#define pirPin  8
+#define WAIT_MOVE 10000
+#define RELAY1  2
+
+unsigned long previousMillis = 0;
 
 void setup() {
   pinMode(pirPin, INPUT);
-  pinMode(redPin, OUTPUT);
-  pinMode(greenPin, OUTPUT);
-  pinMode(bluePin, OUTPUT);
-
-  setColor(255, 0, 0);  // red
-  delay(1000);
-  setColor(0, 255, 0);  // green
-  delay(1000);
-  setColor(0, 0, 255);  // blue
-  delay(1000);
-  setColor(255, 255, 0);// yellow
-  delay(1000);  
-  setColor(80, 0, 80);  // purple
-  delay(1000);
-  setColor(0, 255, 255);// aqua
-  delay(1000);
-  
   Serial.begin(9600);
+  pinMode(RELAY1, OUTPUT);
 }
 
 void loop() {
-  val = digitalRead(pirPin); //read state of the PIR
-  if (val == LOW) {
-    setColor(0, 255, 0);  // green
+
+  unsigned long currentMillis = millis();
+
+
+  int val = digitalRead(pirPin); //read state of the PIR
+  if (val == LOW && (currentMillis - previousMillis > WAIT_MOVE)) {
+    digitalWrite(RELAY1, 1);          // Turns OFF Relays 1
     Serial.println("No motion"); //if the value read is low, there was no motion
   }
   else {
-    setColor(255, 0, 0);  // red
+    digitalWrite(RELAY1, 0);          // Turns ON Relays 1
     Serial.println("Motion!"); //if the value read was high, there was motion
+    previousMillis = currentMillis;
     delay(2500);
   }
   delay(50);
 }
 
-void setColor(int red, int green, int blue)
-{
-#ifdef COMMON_ANODE
-  red = 255 - red;
-  green = 255 - green;
-  blue = 255 - blue;
-#endif
-  analogWrite(redPin, red);
-  analogWrite(greenPin, green);
-  analogWrite(bluePin, blue);
-}
