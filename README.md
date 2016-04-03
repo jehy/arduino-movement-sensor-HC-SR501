@@ -1,2 +1,2 @@
 # arduino-movement-sensor-HC-SR501
-arduino movement sensor HC-SR501 with simple RGB LED
+Using movement sensor HC-SR501 with arduino and relay (for example, to control light)
