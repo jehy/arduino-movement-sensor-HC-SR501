@@ -6,15 +6,16 @@ unsigned long previousMillis = 0;
 
 void setup() {
   pinMode(pirPin, INPUT);
-  Serial.begin(9600);
   pinMode(RELAY1, OUTPUT);
+  Serial.begin(9600);
+  
+  delay(200);
+  digitalWrite(RELAY1, 0);          // Turns OFF Relays 1
 }
 
 void loop() {
 
   unsigned long currentMillis = millis();
-
-
   int val = digitalRead(pirPin); //read state of the PIR
   if (val == LOW) {
     Serial.println("No motion"); //if the value read is low, there was no motion
